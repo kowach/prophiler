@@ -80,12 +80,15 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
         <?php $this->partial('partials/aggregator', ['profiler' => $profiler, 'aggregator' => $aggregator]); ?>
     <?php endforeach; ?>
 </div>
-
+<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 <script>
-    if (!window.jQuery) {
-        document.write('<script src="//code.jquery.com/jquery-2.1.1.min.js"><\/script>');
-    }
     window.addEventListener("load", function () {
+        if (!window.jQuery) {
+            var script = document.createElement("script");
+            script.src = "//code.jquery.com/jquery-2.1.1.min.js";
+            script.type = "text/javascript";
+            document.getElementsByTagName("head")[0].appendChild(script);
+        }
         $('json').each(function (index, el) {
             el.innerHTML = JSON.stringify(JSON.parse(el.innerHTML), null, '    ');
         });
