@@ -4,7 +4,7 @@ $('json').each(function (index, el) {
 
 $(document).on('click','#prophiler nav li', function() {
     var hs = $(this).hasClass("selected");
-    $('#prophiler .benchmarks').hide();
+    $('#prophiler .datacollector').hide();
     $('#prophiler nav li').removeClass('selected');
     if(hs) {
         $($(this).data('target')).hide();
