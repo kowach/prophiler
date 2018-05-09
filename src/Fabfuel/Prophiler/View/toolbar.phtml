@@ -6,11 +6,6 @@
 use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
 
 ?>
-<!--
-<style>
-    <?php /*echo file_get_contents(__DIR__ . '/css/screen.css'); */?>
-</style>
--->
 
 <div class="request">
 
@@ -84,21 +79,3 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
     <?php endforeach; ?>
 
 </div>
-
-<!--
-<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-<script>
-    window.addEventListener("load", function () {
-        if (!window.jQuery) {
-            var script = document.createElement("script");
-            script.src = "//code.jquery.com/jquery-2.1.1.min.js";
-            script.type = "text/javascript";
-            document.getElementsByTagName("head")[0].appendChild(script);
-        }
-        $('json').each(function (index, el) {
-            el.innerHTML = JSON.stringify(JSON.parse(el.innerHTML), null, '    ');
-        });
-        $("#prophiler nav li").click(function() { $(this).toggleClass("selected"); });
-    });
-</script>
--->

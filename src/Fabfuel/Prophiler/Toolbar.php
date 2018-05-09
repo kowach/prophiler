@@ -68,11 +68,13 @@ class Toolbar
     /**
      * Return css
      *
+     * @param bool $includeFontAwesome
      * @return string
      */
-    public function css()
+    public function css($includeFontAwesome=true)
     {
-        return '<style>'.PHP_EOL.file_get_contents(__DIR__ . '/View/css/screen.css').PHP_EOL.'</style>';
+        return ($includeFontAwesome?'<link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />':'').PHP_EOL.
+            '<style>'.PHP_EOL.file_get_contents(__DIR__ . '/View/css/screen.css').PHP_EOL.'</style>'.PHP_EOL;
     }
 
     /**

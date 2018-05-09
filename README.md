@@ -19,7 +19,7 @@ Here you can see the toolbar in action: http://prophiler.fabfuel.de/demo.php
 You can use composer to install the Prophiler. Just add it as dependency:
 
     "require": {
-       	"fabfuel/prophiler": "~1.0",
+       	"kowach/prophiler": "dev-php7",
     }
 
 ## Setup (general)
@@ -164,4 +164,61 @@ To record session writing, you can commit (this is also known as `session_write_
     
 ```php
 session_commit();
+```
+
+## Injecting toolbar (update)
+Toolbar is positioned at bottom by default and stacked on every ajax request.
+
+To inject toolbar put it in controller in afterExecuteRoute action:
+```php
+public function afterExecuteRoute(Dispatcher $dispatcher)
+{
+    if($this->di->has('profiler') && strpos($this->response->getHeaders()->get('Content-Type'),'application/json')===false) {
+        $toolbar = new \Fabfuel\Prophiler\Toolbar($this->di->get('profiler'));
+        $toolbar->setTitle($dispatcher->getControllerName().'/'.$dispatcher->getActionName());
+        $toolbar->addDataCollector(new \Fabfuel\Prophiler\DataCollector\Request());
+        // ... here add other data collectors
+        $this->view->profiler_toolbar = $toolbar->render(); // html;
+        $this->view->profiler_css = $toolbar->css();        // style;
+        $this->view->profiler_js = $toolbar->js();          // js;
+     }
+}
+```
+In view before closing body tag:
+```php
+<body>
+
+....
+
+{{ profiler_css }}
+<div id="prophiler">
+    {{ profiler_toolbar }}
+</div>
+{{ profiler_js }}
+</body>
+```
+
+In ajax request:
+```php
+public function someAction() {
+
+    # Json object to return
+    $json = new \stdClass();
+    $json->data = 'Some user data';
+
+    # Init toolbar
+    $toolbar = new \Fabfuel\Prophiler\Toolbar($this->di->get('profiler'));
+    $toolbar->addDataCollector(new \Fabfuel\Prophiler\DataCollector\Request());
+    $toolbar->setTitle('XHR: '.$this->router->getControllerName().'/'.$this->router->getActionName());
+    
+    # Inject toolbar
+    $json->profiler_toolbar = $toolbar->render();
+    
+    # Return response
+    $this->response->setJsonContent($json);
+    $this->view->disable();
+    
+    return $this->response;
+    
+}
 ```
