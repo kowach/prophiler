@@ -23,6 +23,11 @@ class Toolbar
     protected $profiler;
 
     /**
+     * @var string
+     */
+    protected $title = 'Prophiler';
+
+    /**
      * @var DataCollectorInterface[]
      */
     protected $dataCollectors = [];
@@ -33,6 +38,10 @@ class Toolbar
     public function __construct(ProfilerInterface $profiler)
     {
         $this->setProfiler($profiler);
+    }
+    public function setTitle($title)
+    {
+        $this->title=$title;
     }
 
     /**
@@ -54,6 +63,26 @@ class Toolbar
             'alertCount' => count($alerts)
         ]);
         return ob_get_clean();
+    }
+
+    /**
+     * Return css
+     *
+     * @return string
+     */
+    public function css()
+    {
+        return '<style>'.PHP_EOL.file_get_contents(__DIR__ . '/View/css/screen.css').PHP_EOL.'</style>';
+    }
+
+    /**
+     * Return javascript
+     *
+     * @return string
+     */
+    public function js()
+    {
+        return '<script>'.PHP_EOL.file_get_contents(__DIR__ . '/View/js/profiler.js').PHP_EOL.'</script>';
     }
 
     /**

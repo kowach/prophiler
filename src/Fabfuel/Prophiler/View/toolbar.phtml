@@ -5,14 +5,17 @@
 
 use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
 
-?><style>
-    <?php echo file_get_contents(__DIR__ . '/css/screen.css'); ?>
+?>
+<!--
+<style>
+    <?php /*echo file_get_contents(__DIR__ . '/css/screen.css'); */?>
 </style>
+-->
 
-<div id="prophiler">
+<div class="request">
 
     <div class="toolbar">
-        <h1 class="logo">Prophiler</h1>
+        <h1 class="logo"><?php echo $this->title; ?></h1>
 
         <nav>
             <ul>
@@ -22,14 +25,14 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
                 <li>
                     <span class="label color-3"><i class="fa fa-tasks"></i> <?php echo BenchmarkFormatter::formatMemoryUsage(memory_get_peak_usage()) ?></span>
                 </li>
-                <li>
-                    <a href="javascript:void(0);" onclick="return $('#prophiler-benchmarks').slideToggle('fast');"><span class="label color-5"><i class="fa fa-tachometer"></i> Timeline</span></a>
+                <li data-target="#prophiler-benchmarks-<?= spl_object_hash($profiler) ?>">
+                    <a href="javascript:void(0);"><span class="label color-5"><i class="fa fa-tachometer"></i> Timeline</span></a>
                 </li>
 
                 <?php foreach ($aggregators as $aggregator): ?>
-                    <li>
+                    <li data-target="#prophiler-aggregator-<?= spl_object_hash($aggregator) ?>">
                         <?php if (count($aggregator)): ?>
-                            <a href="javascript:void(0);" onclick="return $('#prophiler-aggregator-<?= spl_object_hash($aggregator) ?>').slideToggle('fast');">
+                            <a href="javascript:void(0);">
                         <?php endif; ?>
 
                         <span class="label severity-<?= $aggregator->getSeverity() ?>">
@@ -43,8 +46,8 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
                 <?php endforeach; ?>
 
                 <?php if (count(new \Fabfuel\Prophiler\Iterator\ComponentFilteredIterator($profiler, 'Logger')) >= 1): ?>
-                    <li>
-                        <a href="javascript:void(0);" onclick="return $('#prophiler-logs').slideToggle('fast');">
+                    <li data-target="#prophiler-logs-<?= spl_object_hash($profiler) ?>">
+                        <a href="javascript:void(0);">
                             <span class="label <?= $alertCount ? 'color-0' : 'color-5' ?>">
                                 <i class="fa fa-align-left"></i> Logs
                                 <?php if ($alertCount): ?>
@@ -56,19 +59,19 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
                 <?php endif; ?>
 
                 <?php foreach ($dataCollectors as $dataCollector): ?>
-                    <li>
-                        <a href="javascript:void(0);" onclick="return $('#prophiler-datacollector-<?= md5($dataCollector->getTitle()) ?>').slideToggle('fast');"><span class="label color-5"><?= $dataCollector->getIcon() ?> <?= $dataCollector->getTitle() ?></span></a>
+                    <li data-target="#prophiler-datacollector-<?= md5($dataCollector->getTitle()) ?>">
+                        <a href="javascript:void(0);"><span class="label color-5"><?= $dataCollector->getIcon() ?> <?= $dataCollector->getTitle() ?></span></a>
                     </li>
                 <?php endforeach; ?>
             </ul>
         </nav>
     </div>
 
-    <div id="prophiler-benchmarks" class="benchmarks">
+    <div id="prophiler-benchmarks-<?= spl_object_hash($profiler) ?>" class="benchmarks">
         <?php $this->partial('partials/benchmarks', ['profiler' => $profiler, 'benchmarks' => $profiler, ]); ?>
     </div>
 
-    <div id="prophiler-logs" class="logs">
+    <div id="prophiler-logs-<?= spl_object_hash($profiler) ?>" class="logs">
         <?php $this->partial('partials/logs', ['profiler' => $profiler]); ?>
     </div>
 
@@ -79,7 +82,10 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
     <?php foreach ($aggregators as $aggregator): ?>
         <?php $this->partial('partials/aggregator', ['profiler' => $profiler, 'aggregator' => $aggregator]); ?>
     <?php endforeach; ?>
+
 </div>
+
+<!--
 <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 <script>
     window.addEventListener("load", function () {
@@ -92,5 +98,7 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
         $('json').each(function (index, el) {
             el.innerHTML = JSON.stringify(JSON.parse(el.innerHTML), null, '    ');
         });
+        $("#prophiler nav li").click(function() { $(this).toggleClass("selected"); });
     });
 </script>
+-->

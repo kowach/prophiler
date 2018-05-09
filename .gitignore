@@ -3,3 +3,4 @@
 .sass-cache
 .idea/
 /composer.phar
+/src/Fabfuel/Prophiler/View/sass/compass/
