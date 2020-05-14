@@ -4,7 +4,7 @@ use \Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
 /**
  * @var \Fabfuel\Prophiler\Aggregator\AggregationInterface $aggregation
  */
-?><div id="prophiler-aggregator-<?= spl_object_hash($aggregator) ?>" class="benchmarks">
+?><div id="prophiler-aggregator-<?= spl_object_hash($aggregator).$uid ?>" class="benchmarks datacollector">
     <div class="table">
 
         <div class="row header">

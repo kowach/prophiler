@@ -5,13 +5,14 @@
 
 use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
 
+$uid=uniqid();
 ?>
 
 <div class="request">
 
     <div class="toolbar">
+        <div style="float: right"><a title="Close" href="javascript:void(0);" onclick="$(this).parent().parent().parent().remove()"><span class="label color-6"><i class="fa fa-times"></i></span></a></div>
         <h1 class="logo"><?php echo $this->title; ?></h1>
-
         <nav>
             <ul>
                 <li>
@@ -20,12 +21,12 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
                 <li>
                     <span class="label color-3"><i class="fa fa-tasks"></i> <?php echo BenchmarkFormatter::formatMemoryUsage(memory_get_peak_usage()) ?></span>
                 </li>
-                <li data-target="#prophiler-benchmarks-<?= spl_object_hash($profiler) ?>">
+                <li data-target="#prophiler-benchmarks-<?= spl_object_hash($profiler).$uid ?>">
                     <a href="javascript:void(0);"><span class="label color-5"><i class="fa fa-tachometer"></i> Timeline</span></a>
                 </li>
 
                 <?php foreach ($aggregators as $aggregator): ?>
-                    <li data-target="#prophiler-aggregator-<?= spl_object_hash($aggregator) ?>">
+                    <li data-target="#prophiler-aggregator-<?= spl_object_hash($aggregator).$uid ?>">
                         <?php if (count($aggregator)): ?>
                             <a href="javascript:void(0);">
                         <?php endif; ?>
@@ -41,7 +42,7 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
                 <?php endforeach; ?>
 
                 <?php if (count(new \Fabfuel\Prophiler\Iterator\ComponentFilteredIterator($profiler, 'Logger')) >= 1): ?>
-                    <li data-target="#prophiler-logs-<?= spl_object_hash($profiler) ?>">
+                    <li data-target="#prophiler-logs-<?= spl_object_hash($profiler).$uid ?>">
                         <a href="javascript:void(0);">
                             <span class="label <?= $alertCount ? 'color-0' : 'color-5' ?>">
                                 <i class="fa fa-align-left"></i> Logs
@@ -54,28 +55,28 @@ use Fabfuel\Prophiler\Toolbar\Formatter\BenchmarkFormatter;
                 <?php endif; ?>
 
                 <?php foreach ($dataCollectors as $dataCollector): ?>
-                    <li data-target="#prophiler-datacollector-<?= md5($dataCollector->getTitle()) ?>">
+                    <li data-target="#prophiler-datacollector-<?= md5($dataCollector->getTitle()).$uid ?>">
                         <a href="javascript:void(0);"><span class="label color-5"><?= $dataCollector->getIcon() ?> <?= $dataCollector->getTitle() ?></span></a>
                     </li>
                 <?php endforeach; ?>
-            </ul>
+              </ul>
         </nav>
     </div>
 
-    <div id="prophiler-benchmarks-<?= spl_object_hash($profiler) ?>" class="benchmarks">
+    <div id="prophiler-benchmarks-<?= spl_object_hash($profiler).$uid ?>" class="benchmarks datacollector">
         <?php $this->partial('partials/benchmarks', ['profiler' => $profiler, 'benchmarks' => $profiler, ]); ?>
     </div>
 
-    <div id="prophiler-logs-<?= spl_object_hash($profiler) ?>" class="logs">
+    <div id="prophiler-logs-<?= spl_object_hash($profiler).$uid ?>" class="logs datacollector">
         <?php $this->partial('partials/logs', ['profiler' => $profiler]); ?>
     </div>
 
     <?php foreach ($dataCollectors as $dataCollector): ?>
-        <?php $this->partial('partials/datacollector', ['dataCollector' => $dataCollector]); ?>
+        <?php $this->partial('partials/datacollector', ['dataCollector' => $dataCollector, 'uid'=>$uid]); ?>
     <?php endforeach; ?>
 
     <?php foreach ($aggregators as $aggregator): ?>
-        <?php $this->partial('partials/aggregator', ['profiler' => $profiler, 'aggregator' => $aggregator]); ?>
+        <?php $this->partial('partials/aggregator', ['profiler' => $profiler, 'aggregator' => $aggregator, 'uid'=>$uid]); ?>
     <?php endforeach; ?>
 
 </div>
